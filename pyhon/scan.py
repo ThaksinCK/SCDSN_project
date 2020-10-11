@@ -1,20 +1,35 @@
+import openpyxl 
+import datetime
 from openpyxl import Workbook
-import openpyxl as op
 
-def enter_score():
-    file = ('C:\\Users\\SCDSN0\\PycharmProjects\\SCDSNproject\\Excle\\คะแนนความสะอาด\\ภาคเรียนที่1\\Term1.xlsx')
-    wb = op.load_workbook(file)
-    ws = wb.active
+x =datetime.datetime.now()
+autows = x.strftime("%B")
+wb = openpyxl.load_workbook('')
+ws = wb[str(autows)]
 
-    for row in ws.iter_rows(min_row=2,min_col=1,max_col=1,max_row=15):
+def scanrow(room):
+	countrow = 0
+	for row in ws.iter_rows(1,10,1,1):
+		for cell in row:
+			countrow += 1
+			if cell.value == room:
+				return countrow
 
-        #เรียกใช้Function iter โดยกำหนดจุดเริ่มต้นที่ (2,1)(minrow2,mincol1)
-        #กำหนดจุดเสิ้นสุพที่่ (15,1)(maxrow15,maxcol1)
-        #มาเก็บไว้ในตัวแปล row
+def scancol():
+  countcol = 97
+  time = datetime.datetime.now()
+	timecal = str(time.year) + '-' + str(time.month) + '-' + str(time.day)
+	
+	for row in ws.iter_rows(1,1,1,15):
+		for cell in row:
+			x = str(cell.value)
+			y = x.replace(' 00:00:00','')
+			countcol += 1
+			if y == timecal:
+				return chr(countcol)
 
-        for cell in row: #นำค่า row มาใส่ใน cell เพื่อใช้ในการึำนวณ
-            print(cell.value) #ดึงค่าทีี่ในcellออกมา
-
-    return cell.value #คืนค่ากลับไปเพื่อใช้คำนวณที่อื่น
-
-print('Done!')
+def scanroom(room):				
+	row = scanrow(room)
+	col = scancol()
+	cell = str(col)+str(row)
+	return cell
